@@ -9,6 +9,7 @@ import {
 import { validateUserCreation } from "../middlewares/validate.js";
 import { updateUserByEmail } from "../controllers/user.controller.js";
 import { deleteUserByEmail } from "../controllers/user.controller.js";
+import { loginUser } from "../controllers/user.controller.js";
 
 const userRouter = (app) => {
   var router = express.Router();
@@ -33,6 +34,9 @@ const userRouter = (app) => {
 
   // Delete a User by email
   router.delete("/email/:email", deleteUserByEmail);
+
+  //Login a User
+  router.post("/login", loginUser);
 
   app.use("/api/users", router);
 };

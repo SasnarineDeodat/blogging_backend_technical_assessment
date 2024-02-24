@@ -33,6 +33,32 @@ export const createUser = async (req, res) => {
   }
 };
 
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email: email } });
+    if (!user) {
+      return res.status(404).send({ message: "User not found." });
+    }
+
+    // Compare provided password with hashed password in database
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).send({ message: "Invalid credentials." });
+    }
+
+    res.send({
+      message: "Login successful",
+      user: { id: user.id, email: user.email, username: user.username },
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: "Error logging in user.",
+    });
+  }
+};
+
 // Retrieve all Users from the database
 export const findAllUsers = async (req, res) => {
   try {
