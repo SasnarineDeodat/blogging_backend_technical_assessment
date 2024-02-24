@@ -2,17 +2,21 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import db from "./models";
 
 const app = express();
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 dotenv.config();
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Welcome to our blogging app!");
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
