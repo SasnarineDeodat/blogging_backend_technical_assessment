@@ -50,12 +50,15 @@ export const findAllUsers = async (req, res) => {
   }
 };
 
-// Find a single User with an id
+// Find a single User with username
 export const findOneUser = async (req, res) => {
-  const id = req.params.id;
+  const username = req.params.username;
 
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findOne({
+      where: { username: username },
+      attributes: ["username", "email"], // Exclude password and other sensitive info
+    });
     if (user) {
       res.json(user);
     } else {
