@@ -44,6 +44,17 @@ const userRouter = (app) => {
     })(req, res, next);
   });
 
+  //Logout user
+
+  router.get("/logout", isAuthenticated, (req, res) => {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.json({ message: "You have been logged out." });
+    });
+  });
+
   app.use("/api/users", router);
 };
 
