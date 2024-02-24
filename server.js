@@ -2,7 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import db from "./models";
+import db from "./models/index.js";
+import userRouter from "./routes/user.routes.js";
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,8 @@ db.sequelize.sync(); // Sync database
 app.get("/", (req, res) => {
   res.send("Welcome to our blogging app!");
 });
+
+userRouter(app);
 
 const PORT = process.env.PORT || 8080;
 
