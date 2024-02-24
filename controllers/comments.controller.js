@@ -18,3 +18,24 @@ export const createComment = async (req, res) => {
     });
   }
 };
+
+// Find all comments by the authenticated user
+export const findCommentsByUser = async (req, res) => {
+  try {
+    const comments = await Comment.findAll({
+      where: { userId: req.user.id },
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "username", "email"],
+        },
+      ],
+    });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving comments.",
+    });
+  }
+};
