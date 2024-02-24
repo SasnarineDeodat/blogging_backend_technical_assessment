@@ -1,5 +1,4 @@
 import db from "../models/index.js";
-import passport from "passport";
 import bcrypt from "bcrypt";
 import { validationResult } from "express-validator";
 
@@ -26,7 +25,10 @@ export const createUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.json(user);
+    req.login(user, (err) => {
+      if (err) return next(err);
+      return res.json({ message: "Account created successfully" });
+    });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the User.",
