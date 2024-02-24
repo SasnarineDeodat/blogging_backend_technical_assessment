@@ -1,23 +1,27 @@
 import express from "express";
-import users from "../controllers/user.controller.js";
+import {
+  createUser,
+  findAllUsers,
+  findOneUser,
+} from "../controllers/user.controller.js";
 
 const userRouter = (app) => {
   var router = express.Router();
 
   // Create a new User
-  router.post("/", users.create);
+  router.post("/", createUser);
 
   // Retrieve all Users
-  router.get("/", users.findAll);
+  router.get("/", findAllUsers);
 
   // Retrieve a single User with id
-  router.get("/:id", users.findOne);
+  router.get("/:id", findOneUser);
 
   // Update a User with id
-  router.put("/:id", users.update);
+  // router.put("/:id", users.update);
 
   // Delete a User with id
-  router.delete("/:id", users.delete);
+  // router.delete("/:id", users.delete);
 
   app.use("/api/users", router);
 };

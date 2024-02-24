@@ -4,13 +4,14 @@ import postModel from "./post.model.js";
 import commentModel from "./comment.model.js";
 
 const sequelize = new Sequelize(
-  process.env.DB,
-  process.env.USER,
-  process.env.PASSWORD,
+  process.env.POSTGRESQL_DB,
+  process.env.POSTGRESQL_USER,
+  process.env.POSTGRESQL_PASSWORD,
   {
-    host: process.env.HOST,
-    dialect: process.env.dialect,
-    operatorsAliases: false,
+    host: process.env.POSTGRESQL_HOST,
+    port: process.env.POSTGRESQL_PORT,
+    dialect: process.env.POSTGRESQL_DIALECT,
+    logging: false,
 
     pool: {
       max: 5,

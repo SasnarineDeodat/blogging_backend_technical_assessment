@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import dotenv from "dotenv";
+import "dotenv/config"; // Automatically loads environment variables from a .env file
 import db from "./models/index.js";
 import userRouter from "./routes/user.routes.js";
 
@@ -9,8 +9,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-dotenv.config();
 
 db.sequelize.sync(); // Sync database
 
