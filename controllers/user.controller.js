@@ -4,9 +4,18 @@ import { validationResult } from "express-validator";
 
 const User = db.users;
 
-// Create and Save a new User
+/**
+ * Create and save a new user to the database.
+ *
+ * This function validates the request body for any errors, hashes the user's password for security,
+ * and then creates a new user record in the database. Upon successful creation, the user is automatically
+ * logged in using Passport's req.login method.
+ *
+ * @param {Object} req - The request object containing user input.
+ * @param {Object} res - The response object.
+ */
 export const createUser = async (req, res) => {
-  // Check for validation errors
+  // Validate request body for any errors.
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -15,16 +24,17 @@ export const createUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    // Hash password
+    // Hash the user's password for security.
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    // Create a User
+    // Create a new user record in the database.
     const user = await User.create({
       username,
       email,
       password: hashedPassword,
     });
 
+    // Automatically log in the newly created user.
     req.login(user, (err) => {
       if (err) return next(err);
       return res.json({ message: "Account created successfully" });
@@ -36,7 +46,15 @@ export const createUser = async (req, res) => {
   }
 };
 
-// Retrieve all Users from the database
+/**
+ * Retrieve all users from the database.
+ *
+ * This function fetches all user records from the database, excluding sensitive information like passwords,
+ * and returns them in the response.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 export const findAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
@@ -50,7 +68,15 @@ export const findAllUsers = async (req, res) => {
   }
 };
 
-// Find a single User with username
+/**
+ * Find a single user by username.
+ *
+ * This function looks up a user by their username, excluding sensitive information like passwords,
+ * and returns the user information if found.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 export const findOneUser = async (req, res) => {
   const username = req.params.username;
 
@@ -73,20 +99,28 @@ export const findOneUser = async (req, res) => {
   }
 };
 
-// Update the User if they are authenticated and authorized to do it
+/**
+ * Update the authenticated user's profile.
+ *
+ * This function allows an authenticated user to update their own profile information,
+ * including username, email, and password. The password is hashed before updating for security.
+ *
+ * @param {Object} req - The request object, containing the new user data.
+ * @param {Object} res - The response object.
+ */
 export const updateUserProfile = async (req, res) => {
   const userId = req.user.id; // Assuming req.user is populated by Passport after authentication
   const { username, email, password } = req.body;
 
   try {
-    // Additional validation or password hashing
+    // Hash the new password if provided.
     const hashedPassword = password
       ? await bcrypt.hash(password, 8)
       : undefined;
     const updateData = {
       username,
       email,
-      ...(hashedPassword && { password: hashedPassword }), // Only include password in update if it's provided
+      ...(hashedPassword && { password: hashedPassword }), // Include hashed password in update if provided
     };
 
     const [updated] = await User.update(updateData, {
@@ -110,7 +144,14 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
-// Delete the User if they are authenticated and authorized to do it
+/**
+ * Delete the authenticated user's profile.
+ *
+ * This function allows an authenticated user to delete their own profile from the database.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 export const deleteUserProfile = async (req, res) => {
   const userId = req.user.id;
 
