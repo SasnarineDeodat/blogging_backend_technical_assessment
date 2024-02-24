@@ -63,12 +63,12 @@ export const findOneUser = async (req, res) => {
       res.json(user);
     } else {
       res.status(404).send({
-        message: `Cannot find User with id=${id}.`,
+        message: `Cannot find User with username=${username}.`,
       });
     }
   } catch (err) {
     res.status(500).send({
-      message: "Error retrieving User with id=" + id,
+      message: "Error retrieving User with username=" + username,
     });
   }
 };
