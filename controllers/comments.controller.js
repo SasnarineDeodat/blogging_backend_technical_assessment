@@ -13,9 +13,12 @@ export const createComment = async (req, res) => {
     });
     res.json(comment);
   } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while creating the comment.",
-    });
+    res
+      .status(500)
+      .send({
+        message:
+          err.message || "Some error occurred while creating the comment.",
+      });
   }
 };
 
@@ -34,8 +37,28 @@ export const findCommentsByUser = async (req, res) => {
     });
     res.json(comments);
   } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while retrieving comments.",
-    });
+    res
+      .status(500)
+      .send({
+        message:
+          err.message || "Some error occurred while retrieving comments.",
+      });
+  }
+};
+
+// Delete a comment
+export const deleteComment = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const comment = await Comment.findByPk(id);
+    if (comment.userId !== req.user.id) {
+      return res.status(403).send({ message: "Unauthorized!" });
+    }
+    await comment.destroy();
+    res.send({ message: "Comment was deleted successfully." });
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: err.message || "Could not delete the comment." });
   }
 };
