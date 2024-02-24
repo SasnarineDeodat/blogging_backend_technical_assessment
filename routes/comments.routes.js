@@ -10,12 +10,11 @@ import {
 const userRouter = (app) => {
   const router = express.Router();
 
-  router.post("/", isAuthenticated, createPost);
-  router.get("/by-email/:email", findPostsByEmail);
-  router.put("/:id", isAuthenticated, updatePost);
-  router.delete("/:id", isAuthenticated, deletePost);
+  router.post("/", isAuthenticated, createComment);
+  router.get("/my-comments", isAuthenticated, findCommentsByUser);
+  router.delete("/:id", isAuthenticated, deleteComment);
 
-  app.use("/api/posts", router);
+  app.use("/api/comments", router);
 };
 
 export default userRouter;
