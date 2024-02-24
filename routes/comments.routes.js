@@ -1,13 +1,12 @@
 import express from "express";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 import {
-  createPost,
-  findPostsByEmail,
-  updatePost,
-  deletePost,
-} from "../controllers/post.controller.js";
+  createComment,
+  findCommentsByUser,
+  deleteComment,
+} from "../controllers/comments.controller.js";
 
-const userRouter = (app) => {
+const commentRouter = (app) => {
   const router = express.Router();
 
   router.post("/", isAuthenticated, createComment);
@@ -17,4 +16,4 @@ const userRouter = (app) => {
   app.use("/api/comments", router);
 };
 
-export default userRouter;
+export default commentRouter;

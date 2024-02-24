@@ -7,7 +7,7 @@ import {
   deletePost,
 } from "../controllers/post.controller.js";
 
-const userRouter = (app) => {
+const postRouter = (app) => {
   const router = express.Router();
 
   router.post("/", isAuthenticated, createPost);
@@ -18,4 +18,4 @@ const userRouter = (app) => {
   app.use("/api/posts", router);
 };
 
-export default userRouter;
+export default postRouter;
