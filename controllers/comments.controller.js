@@ -1,6 +1,7 @@
 import db from "../models/index.js";
 
-const { Comment, User } = db;
+const User = db.users;
+const Comment = db.comments;
 
 // Create a new comment
 export const createComment = async (req, res) => {
@@ -13,12 +14,9 @@ export const createComment = async (req, res) => {
     });
     res.json(comment);
   } catch (err) {
-    res
-      .status(500)
-      .send({
-        message:
-          err.message || "Some error occurred while creating the comment.",
-      });
+    res.status(500).send({
+      message: err.message || "Some error occurred while creating the comment.",
+    });
   }
 };
 
@@ -37,12 +35,9 @@ export const findCommentsByUser = async (req, res) => {
     });
     res.json(comments);
   } catch (err) {
-    res
-      .status(500)
-      .send({
-        message:
-          err.message || "Some error occurred while retrieving comments.",
-      });
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving comments.",
+    });
   }
 };
 

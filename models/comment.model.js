@@ -4,6 +4,10 @@ const commentModel = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    postId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   return Comment;
