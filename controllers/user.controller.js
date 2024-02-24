@@ -113,3 +113,27 @@ export const deleteUser = async (req, res) => {
     });
   }
 };
+
+// Update a User by email
+export const updateUserByEmail = async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const [updated] = await User.update(req.body, {
+      where: { email: email },
+    });
+
+    if (updated) {
+      const updatedUser = await User.findOne({ where: { email: email } });
+      res.json(updatedUser);
+    } else {
+      res.status(404).send({
+        message: `Cannot find User with email=${email}.`,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error updating User with email=" + email,
+    });
+  }
+};
