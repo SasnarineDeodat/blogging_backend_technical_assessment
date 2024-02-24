@@ -1,4 +1,5 @@
 import db from "../models/index.js";
+import passport from "passport";
 import bcrypt from "bcrypt";
 import { validationResult } from "express-validator";
 
@@ -29,32 +30,6 @@ export const createUser = async (req, res) => {
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the User.",
-    });
-  }
-};
-
-export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ where: { email: email } });
-    if (!user) {
-      return res.status(404).send({ message: "User not found." });
-    }
-
-    // Compare provided password with hashed password in database
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).send({ message: "Invalid credentials." });
-    }
-
-    res.send({
-      message: "Login successful",
-      user: { id: user.id, email: user.email, username: user.username },
-    });
-  } catch (err) {
-    res.status(500).send({
-      message: "Error logging in user.",
     });
   }
 };
