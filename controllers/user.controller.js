@@ -64,3 +64,27 @@ export const findOneUser = async (req, res) => {
     });
   }
 };
+
+// Update a User by the id in the request
+export const updateUser = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const [updated] = await User.update(req.body, {
+      where: { id: id },
+    });
+
+    if (updated) {
+      const updatedUser = await User.findByPk(id);
+      res.json(updatedUser);
+    } else {
+      res.status(404).send({
+        message: `Cannot find User with id=${id}.`,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error updating User with id=" + id,
+    });
+  }
+};
