@@ -44,3 +44,20 @@ export const findPostsByEmail = async (req, res) => {
     });
   }
 };
+
+// Update a post
+export const updatePost = async (req, res) => {
+  const id = req.user.id;
+  try {
+    const post = await Post.findByPk(id);
+    if (post.userId !== req.user.id) {
+      return res.status(403).send({ message: "Unauthorized!" });
+    }
+    await post.update(req.body);
+    res.send({ message: "Post was updated successfully." });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while updating the post.",
+    });
+  }
+};
