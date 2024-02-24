@@ -6,9 +6,9 @@ import {
   updateUserProfile,
   deleteUserProfile,
 } from "../controllers/user.controller.js";
-import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 import { validateUserCreation } from "../middlewares/validate.js";
 import passport from "passport";
+import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 
 const userRouter = (app) => {
   var router = express.Router();
