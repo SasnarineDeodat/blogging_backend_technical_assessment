@@ -6,6 +6,7 @@ import db from "./models/index.js";
 import userRouter from "./routes/user.routes.js";
 import session from "express-session";
 import passport from "passport";
+import configurePassport from "./config/passport.config.js";
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,8 @@ app.use(
 // Initialize Passport and restore authentication state, if any, from the session.
 app.use(passport.initialize());
 app.use(passport.session());
+
+configurePassport(passport);
 
 db.sequelize.sync(); // Sync database
 
