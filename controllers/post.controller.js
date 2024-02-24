@@ -13,9 +13,11 @@ export const createPost = async (req, res) => {
     });
     res.json(post);
   } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while creating the post.",
-    });
+    res
+      .status(500)
+      .send({
+        message: err.message || "Some error occurred while creating the post.",
+      });
   }
 };
 
@@ -39,15 +41,17 @@ export const findPostsByEmail = async (req, res) => {
     });
     res.json(posts);
   } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while retrieving posts.",
-    });
+    res
+      .status(500)
+      .send({
+        message: err.message || "Some error occurred while retrieving posts.",
+      });
   }
 };
 
 // Update a post
 export const updatePost = async (req, res) => {
-  const id = req.user.id;
+  const id = req.params.id;
   try {
     const post = await Post.findByPk(id);
     if (post.userId !== req.user.id) {
@@ -56,8 +60,27 @@ export const updatePost = async (req, res) => {
     await post.update(req.body);
     res.send({ message: "Post was updated successfully." });
   } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while updating the post.",
-    });
+    res
+      .status(500)
+      .send({
+        message: err.message || "Some error occurred while updating the post.",
+      });
+  }
+};
+
+// Delete a post
+export const deletePost = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const post = await Post.findByPk(id);
+    if (post.userId !== req.user.id) {
+      return res.status(403).send({ message: "Unauthorized!" });
+    }
+    await post.destroy();
+    res.send({ message: "Post was deleted successfully." });
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: err.message || "Could not delete the post." });
   }
 };
