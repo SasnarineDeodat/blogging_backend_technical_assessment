@@ -39,7 +39,9 @@ export const createUser = async (req, res) => {
 // Retrieve all Users from the database
 export const findAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: ["username", "email"], // Exclude password and other sensitive info
+    });
     res.json(users);
   } catch (err) {
     res.status(500).send({
