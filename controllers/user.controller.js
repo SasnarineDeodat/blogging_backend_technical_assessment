@@ -137,3 +137,28 @@ export const updateUserByEmail = async (req, res) => {
     });
   }
 };
+
+// Delete a User with the specified email in the request
+export const deleteUserByEmail = async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const deleted = await User.destroy({
+      where: { email: email },
+    });
+
+    if (deleted) {
+      res.send({
+        message: "User was deleted successfully!",
+      });
+    } else {
+      res.status(404).send({
+        message: `Cannot delete User with email=${email}. Maybe User was not found!`,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Could not delete User with email=" + email,
+    });
+  }
+};
