@@ -11,6 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 dotenv.config();
 
+db.sequelize.sync(); // Sync database
+
 app.get("/", (req, res) => {
   res.send("Welcome to our blogging app!");
 });
