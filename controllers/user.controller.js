@@ -73,75 +73,39 @@ export const findOneUser = async (req, res) => {
   }
 };
 
-// Update a User by the id in the request
-export const updateUser = async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const [updated] = await User.update(req.body, {
-      where: { id: id },
-    });
-
-    if (updated) {
-      const updatedUser = await User.findByPk(id);
-      res.json(updatedUser);
-    } else {
-      res.status(404).send({
-        message: `Cannot find User with id=${id}.`,
-      });
-    }
-  } catch (err) {
-    res.status(500).send({
-      message: "Error updating User with id=" + id,
-    });
-  }
-};
-
-// Delete a User with the specified id in the request
-export const deleteUser = async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const deleted = await User.destroy({
-      where: { id: id },
-    });
-
-    if (deleted) {
-      res.send({
-        message: "User was deleted successfully!",
-      });
-    } else {
-      res.status(404).send({
-        message: `Cannot delete User with id=${id}. Maybe User was not found!`,
-      });
-    }
-  } catch (err) {
-    res.status(500).send({
-      message: "Could not delete User with id=" + id,
-    });
-  }
-};
-
 // Update a User by email
-export const updateUserByEmail = async (req, res) => {
-  const email = req.params.email;
+export const updateUserProfile = async (req, res) => {
+  const userId = req.user.id; // Assuming req.user is populated by Passport after authentication
+  const { username, email, password } = req.body;
 
   try {
-    const [updated] = await User.update(req.body, {
-      where: { email: email },
+    // Additional validation or password hashing
+    const hashedPassword = password
+      ? await bcrypt.hash(password, 8)
+      : undefined;
+    const updateData = {
+      username,
+      email,
+      ...(hashedPassword && { password: hashedPassword }), // Only include password in update if it's provided
+    };
+
+    const [updated] = await User.update(updateData, {
+      where: { id: userId },
     });
 
     if (updated) {
-      const updatedUser = await User.findOne({ where: { email: email } });
+      const updatedUser = await User.findByPk(userId, {
+        attributes: { exclude: ["password"] }, // Exclude password from the response
+      });
       res.json(updatedUser);
     } else {
       res.status(404).send({
-        message: `Cannot find User with email=${email}.`,
+        message: `Cannot find User with id=${userId}.`,
       });
     }
   } catch (err) {
     res.status(500).send({
-      message: "Error updating User with email=" + email,
+      message: "Error updating User profile.",
     });
   }
 };
