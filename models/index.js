@@ -1,4 +1,7 @@
 import Sequelize from "sequelize";
+import userModel from "./user.model.js";
+import postModel from "./post.model.js";
+import commentModel from "./comment.model.js";
 
 const sequelize = new Sequelize(
   process.env.DB,
@@ -24,14 +27,18 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Models/tables
-db.users = require("./user.model.js")(sequelize, Sequelize);
-db.posts = require("./post.model.js")(sequelize, Sequelize);
-db.comments = require("./comment.model.js")(sequelize, Sequelize);
+db.users = userModel(sequelize, Sequelize.DataTypes);
+db.posts = postModel(sequelize, Sequelize.DataTypes);
+db.comments = commentModel(sequelize, Sequelize.DataTypes);
 
 // Relations
-db.posts.belongsTo(db.users);
 db.users.hasMany(db.posts);
-db.comments.belongsTo(db.posts);
+db.posts.belongsTo(db.users);
+
 db.posts.hasMany(db.comments);
+db.comments.belongsTo(db.posts);
+
+db.users.hasMany(db.comments);
+db.comments.belongsTo(db.users);
 
 export default db;
