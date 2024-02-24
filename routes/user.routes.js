@@ -3,11 +3,11 @@ import {
   createUser,
   findAllUsers,
   findOneUser,
+  updateUserProfile,
+  deleteUserProfile,
 } from "../controllers/user.controller.js";
-import { validateUserCreation } from "../middlewares/validate.js";
-import { updateUserProfile } from "../controllers/user.controller.js";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
-import { deleteUserByEmail } from "../controllers/user.controller.js";
+import { validateUserCreation } from "../middlewares/validate.js";
 import passport from "passport";
 
 const userRouter = (app) => {
@@ -25,8 +25,8 @@ const userRouter = (app) => {
   // Update the User if they are authenticated and authorized to do it
   router.put("/profile", isAuthenticated, updateUserProfile);
 
-  // Delete a User by email
-  router.delete("/email/:email", deleteUserByEmail);
+  // Delete the User if they are authenticated and authorized to do it
+  router.delete("/profile", isAuthenticated, deleteUserProfile);
 
   //Login a User
   router.post("/login", (req, res, next) => {

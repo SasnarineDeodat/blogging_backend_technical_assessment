@@ -73,7 +73,7 @@ export const findOneUser = async (req, res) => {
   }
 };
 
-// Update a User by email
+// Update the User if they are authenticated and authorized to do it
 export const updateUserProfile = async (req, res) => {
   const userId = req.user.id; // Assuming req.user is populated by Passport after authentication
   const { username, email, password } = req.body;
@@ -110,27 +110,27 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
-// Delete a User with the specified email in the request
-export const deleteUserByEmail = async (req, res) => {
-  const email = req.params.email;
+// Delete the User if they are authenticated and authorized to do it
+export const deleteUserProfile = async (req, res) => {
+  const userId = req.user.id;
 
   try {
     const deleted = await User.destroy({
-      where: { email: email },
+      where: { id: userId },
     });
 
     if (deleted) {
       res.send({
-        message: "User was deleted successfully!",
+        message: "User profile was deleted successfully!",
       });
     } else {
       res.status(404).send({
-        message: `Cannot delete User with email=${email}. Maybe User was not found!`,
+        message: `Cannot delete User with id=${userId}. Maybe User was not found!`,
       });
     }
   } catch (err) {
     res.status(500).send({
-      message: "Could not delete User with email=" + email,
+      message: "Could not delete User profile.",
     });
   }
 };
