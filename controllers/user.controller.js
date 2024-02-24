@@ -88,3 +88,28 @@ export const updateUser = async (req, res) => {
     });
   }
 };
+
+// Delete a User with the specified id in the request
+export const deleteUser = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const deleted = await User.destroy({
+      where: { id: id },
+    });
+
+    if (deleted) {
+      res.send({
+        message: "User was deleted successfully!",
+      });
+    } else {
+      res.status(404).send({
+        message: `Cannot delete User with id=${id}. Maybe User was not found!`,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Could not delete User with id=" + id,
+    });
+  }
+};
