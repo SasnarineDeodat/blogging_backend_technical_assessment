@@ -44,3 +44,23 @@ export const findAllUsers = async (req, res) => {
     });
   }
 };
+
+// Find a single User with an id
+export const findOneUser = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const user = await User.findByPk(id);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send({
+        message: `Cannot find User with id=${id}.`,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error retrieving User with id=" + id,
+    });
+  }
+};
