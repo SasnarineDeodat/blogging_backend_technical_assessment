@@ -11,7 +11,7 @@ const postRouter = (app) => {
   const router = express.Router();
 
   router.post("/", isAuthenticated, createPost);
-  router.get("/by-email/:email", findPostsByEmail); // No authentication required as per your instructions
+  router.get("/by-email/:email", findPostsByEmail);
   router.put("/:id", isAuthenticated, updatePost);
   router.delete("/:id", isAuthenticated, deletePost);
 
