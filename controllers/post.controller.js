@@ -1,6 +1,7 @@
 import db from "../models/index.js";
 
-const { Post, User } = db;
+const User = db.users;
+const Post = db.posts;
 
 // Create a new post
 export const createPost = async (req, res) => {
@@ -13,11 +14,9 @@ export const createPost = async (req, res) => {
     });
     res.json(post);
   } catch (err) {
-    res
-      .status(500)
-      .send({
-        message: err.message || "Some error occurred while creating the post.",
-      });
+    res.status(500).send({
+      message: err.message || "Some error occurred while creating the post.",
+    });
   }
 };
 
@@ -41,11 +40,9 @@ export const findPostsByEmail = async (req, res) => {
     });
     res.json(posts);
   } catch (err) {
-    res
-      .status(500)
-      .send({
-        message: err.message || "Some error occurred while retrieving posts.",
-      });
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving posts.",
+    });
   }
 };
 
@@ -60,11 +57,9 @@ export const updatePost = async (req, res) => {
     await post.update(req.body);
     res.send({ message: "Post was updated successfully." });
   } catch (err) {
-    res
-      .status(500)
-      .send({
-        message: err.message || "Some error occurred while updating the post.",
-      });
+    res.status(500).send({
+      message: err.message || "Some error occurred while updating the post.",
+    });
   }
 };
 
